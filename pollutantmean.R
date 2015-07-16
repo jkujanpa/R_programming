@@ -9,8 +9,30 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
   ## 'id' is an integer vector indicating the monitor ID numbers
   ## to be used
 
+    
+    values <- NULL
   
-  
+    for(i in id) {
+        
+        print(i)
+        
+        monitor <- formatC(i, width = 3, flag = "0")
+        filename <- paste(monitor, "csv", sep = ".")
+        filename <- paste(directory, filename, sep = "/")
+        
+        print(filename)
+
+        data <- read.csv(filename)
+        
+        if (pollutant == "sulfate") {
+            data <- data[,2]
+        } else { #nitrate
+            data <- data[,3]
+        }
+        
+        data <- data[complete.cases(data)]
+        values <- c(values, data)
+    }
   
   
     
@@ -19,6 +41,6 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
   ## NOTE: Do not round the result!
   
   
-  
+    mean(values)  
   
 }
